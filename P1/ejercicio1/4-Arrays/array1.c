@@ -34,9 +34,9 @@ void init_array(int array[], int size)
 void init_array2(int array[N])
 {
 	int i;
-	printf("Address of the array: %p Sizeof array %lu \n", array, sizeof(array));
 	for (i = 0; i < N; i++)
 		array[i] = i*2;
+	printf("Address of the array: %p Sizeof array %lu \n", array, sizeof(array));
 	printf("Array initialized\n\n");
 }
 
