@@ -25,9 +25,6 @@ int is_prime(int x);
 int main(int argc, char **argv) {
 
   int n = 10; // by default the first 10 primes
-  if(argc = 2) {
-    atoi(argv[2]);
-  }
   int* primes = (int*)malloc(n*sizeof(int));
   compute_primes(primes, n);
 

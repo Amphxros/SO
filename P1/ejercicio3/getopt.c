@@ -52,9 +52,14 @@ int main(int argc, char *argv[])
 	options.lenght= 10;
 	options.title = NULL;
 
-	/* Parse command-line options */
-	while((opt = getopt(argc, argv, "h")) != -1) {
+	while ((opt = getopt (argc, argv, "hle:")) != -1){
 		switch(opt) {
+		case 'l':
+			options.lenght=(int)argv[2];
+		break;
+		case 'e':
+			options.par_mode=EVEN;
+			break;	
 		case 'h':
 			usage();
 			exit(0);

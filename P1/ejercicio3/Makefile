@@ -11,7 +11,6 @@ $(PROG) : $(OBJECTS)
 	gcc -g -o $(PROG) $(OBJECTS)
 
 %.o : %.c $(HEADERS)
-	gcc -c $(CFLAGS) $< -o $@
 
 clean :
 	-rm -f $(OBJECTS) $(PROG)
