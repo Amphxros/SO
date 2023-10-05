@@ -20,7 +20,7 @@ int main()
 	printf("msg len: %lu p len %lu msg2 len %lu\n", strlen(msg), strlen(p), strlen(msg2));
 	printf("msg size: %lu p size %lu msg2 size %lu\n", sizeof(msg), sizeof(p), sizeof(msg2));
 
-	msg[0] = 'B', msg[1] = 'y';
+	msg[0] = 'B', msg[1] = 'y', msg[2]='e', msg[3]='\0';
 	printf("msg: %s, p: %s, msg2: %s\n", msg, p, msg2);
 }
 
