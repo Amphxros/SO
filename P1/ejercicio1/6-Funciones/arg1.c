@@ -22,7 +22,7 @@ int main(void)
 	int total = sum(x, y);
 
 	printf("Complex numbers addition. (%f,%f i) + (%f,%f i) =(%f,%f i)\n",xc.re,xc.im,yc.re,yc.im,zc.re,zc.im);
-	printf("Integer addition:  x +y = %d + %d = %d \n",x,y, total);
+	printf("Integer addition:  x + y = %d + %d = %d \n",x,y, total);
 	return 0;
 }
 

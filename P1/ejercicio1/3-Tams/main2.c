@@ -3,14 +3,14 @@
 
 #define ARRAY_SIZE  10
 
-int a = 7;
+int a=8;
 unsigned long b = 8;
 short c;
 char x;
 char* pc;
 
 int array1[ARRAY_SIZE];
-int array2[a];
+
 
 char* str1    = "STRING OF CHARACTERS";
 char str2[]   = "STRING OF CHARACTERS";
@@ -18,6 +18,8 @@ int main()
 {
 	pc = &x;
 	a = 16;
+
+
 	printf("Address of a: %p Size: %lu \n",&a,sizeof(a));
 	printf("Address of b: %p Size: %lu \n",&b,sizeof(b));
 	printf("Address of c: %p Size: %lu \n",&c,sizeof(c));

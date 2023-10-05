@@ -2,7 +2,7 @@
 
 #define N 10
 #define MAXELEM 5000
-#define MAXVALID 100
+#define MAXVALID 4
 
 // function that prints on the standard output the contents of the array of v of size size
 void imprimeArray(int v[],int size)
@@ -17,7 +17,8 @@ void imprimeArray(int v[],int size)
 // function that copies the contents of a source array in a destination array
 void copyArray(int src[],int dst[],int size)
 {
- 	dst = src;
+	for(int i=0;i<size; i++)
+ 		dst[i] = src[i];
 }
 
 /*
