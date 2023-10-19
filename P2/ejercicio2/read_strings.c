@@ -16,7 +16,7 @@
  */
 char *loadstr(FILE *file)
 {
-	    char* buffer = NULL;
+	char* buffer = NULL;
     size_t buffer_size = 0;
 
     while (1) {
@@ -40,8 +40,6 @@ char *loadstr(FILE *file)
 
 	return buffer;	
 }
-#include <stdio.h>
-#include <stdlib.h>
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
