@@ -10,7 +10,7 @@ char x;
 char* pc;
 
 int array1[ARRAY_SIZE];
-int array2[a];
+int array2[7];
 
 char* str1    = "STRING OF CHARACTERS";
 char str2[]   = "STRING OF CHARACTERS";
