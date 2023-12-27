@@ -1,7 +1,7 @@
 # Practica 1
-
+___
 ## Autores: Amparo Rubio Bellon y  Jorge Zurdo Izquierdo
-
+___
 ## Ejercicio 1
 
 En el directorio ejercicio1 de los ficheros para la práctica ( ficheros_p1.tar.gz) hay una serie de subdirectorios con códigos de pequeños programas de C que pretenden poner de manifiesto algunos de los errores frecuentes que cometen los programadores con poca experiencia con C así como familiarizar al estudiante con las herramientas básicas de compilación que se usan en un entorno Linux.
@@ -85,59 +85,78 @@ Compila y ejecuta el código de los ejemplos proporcionados y responde a las pre
     - Sí, en init_array2, sizeof(array) devuelve el tamaño del array completo porque el tamaño está determinado por la declaración del parámetro.
 ## array2.c
 * ¿La copia del array se realiza correctamente? ¿Por qué? Si no es correcto, escribe un código que sí realice la copia correctamente.
-    - 
+    - No, la copia del array no se realiza correctamente en la versión original de la función copyArray (dst = src;). Esta línea simplemente hace que dst apunte al mismo lugar que src en lugar de copiar los elementos individualmente.
 * Descomenta la llamada a la función tmo en la función main(). Compila de nuevo y ejecuta.
- - 
+ - Si se descomenta la llamada a tmo, se introducirá un comportamiento indefinido al acceder a elementos más allá del tamaño del array a
 * El problema que se produce, ¿es de compilación o de ejecución? ¿Por qué se produce?
-    - 
+    - Ejecución, 
 * Encuentra un valor de MAXVALID superior a 4 con el que no se dé el problema. ¿Se está escribiendo más allá del tamaño del array? Si es así, ¿por qué funciona el código?
+    - No es garantizado que encuentres un valor de MAXVALID superior a 4 que evite el problema. Aunque en algunos casos puede parecer que el código funciona, acceder a elementos más allá del tamaño del array resulta en comportamiento indefinido. 
+    - El código puede parecer funcionar en ciertos escenarios, pero no es seguro ni predecible.
 
 # 5. Punteros
 Compila y ejecuta el código de los ejemplos y responde a las cuestiones proporcionadas para cada uno de ellos.
 
-punteros1.c
-¿Qué operador utilizamos para declarar una variable como un puntero a otro tipo?
-¿Qué operador utilizamos para obtener la dirección de una variable?
-¿Qué operador se utiliza para acceder al contenido de la dirección “a la que apunta” un puntero?
-Hay un error en el código. ¿Se produce en compilación o en ejecución? ¿Por qué se produce?
-punteros2.c
-¿Cuántos bytes se reservan en memoria con la llamada a malloc()?
-¿Cuál es la dirección del primer y último byte de dicha zona reservada?
-¿Por qué el contenido de la dirección apuntada por ptr es 7 y no 5 en el primer printf()?
-¿Por qué se modfica el contenido de ptr[1] tras la sentencia *ptr2=15;?
-Indica dos modos diferentes de escribir el valor 13 en la dirección correspondiente a ptr[100].
-Hay un error en el código. ¿Se manifiesta en compilación o en ejecución? Aunque no se manifieste, el error está. ¿Cuál es?
-punteros3.c
-¿Por qué cambia el valor de ptr[13] tras la asignación ptr = &c;?
-El código tiene (al menos) un error. ¿Se manifiesta en compilación o en ejecución? ¿Por qué?
-¿Qué ocurre con la zona reservada por malloc() tras a asignación ptr = &c;? ¿Cómo se puede acceder a ella? ¿Cómo se puede liberar dicha zona?
-6. Funciones
+## punteros1.c
+* ¿Qué operador utilizamos para declarar una variable como un puntero a otro tipo? 
+    - El operador "*".
+
+* ¿Qué operador utilizamos para obtener la dirección de una variable?
+    - El operador &. 
+* ¿Qué operador se utiliza para acceder al contenido de la dirección “a la que apunta” un puntero?
+    - El operador *. Por ejemplo, *ptr
+* Hay un error en el código. ¿Se produce en compilación o en ejecución? ¿Por qué se produce?
+    - Hay un error en la línea "*ptr = 13;". La variable ptr se ha asignado una dirección arbitraria (0x600a48), y no está permitido acceder a esa dirección de memoria. Este error se manifiesta en tiempo de ejecución y puede provocar un fallo de segmentación.
+
+## punteros2.c
+* ¿Cuántos bytes se reservan en memoria con la llamada a malloc()?
+    - Se reservan nelem * size of (int) bytes en memoria.
+* ¿Cuál es la dirección del primer y último byte de dicha zona reservada?
+    - La dirección del primer byte es la dirección apuntada por ptr (ptr= "0x55bb2c4312a4") y la dirección del último byte es (ptr + (nelem - 1)).
+* ¿Por qué el contenido de la dirección apuntada por ptr es 7 y no 5 en el primer printf()?
+    -  contenido de la dirección apuntada por ptr es 7 porque se ha modificado con ptr[0] = 7; después de la asignación inicial *ptr = 5;.
+* ¿Por qué se modfica el contenido de ptr[1] tras la sentencia *ptr2=15;?
+    - ptr2 apunta a la misma dirección de memoria que ptr. Cuando incrementas ptr2 con ptr2++, ahora ptr2 apunta a la siguiente posición de memoria, que es la misma posición que &ptr[1]. Por lo tanto, al hacer *ptr2 = 15;, se modifica el contenido de ptr[1].
+* Indica dos modos diferentes de escribir el valor 13 en la dirección correspondiente a ptr[100].
+    - Puedes usar ptr[100] = 13; o *(ptr + 100) = 13; 
+* Hay un error en el código. ¿Se manifiesta en compilación o en ejecución? Aunque no se manifieste, el error está. ¿Cuál es?
+    - De ejecución aunque no se da siempre; El error está en *ptr = 3; después de liberar la memoria con free(ptr). Acceder a ptr después de liberar la memoria resulta en un comportamiento indefinido.
+## punteros3.c
+* ¿Por qué cambia el valor de ptr[13] tras la asignación ptr = &c;?
+    - Después de la asignación ptr = &c;, ptr ahora apunta a la dirección de la variable c, y cuando haces ptr[13], estás accediendo a posiciones de memoria más allá de la variable c.
+
+* El código tiene (al menos) un error. ¿Se manifiesta en compilación o en ejecución? ¿Por qué?
+    -Se manifiesta en ejecución. Hay un error en la línea free(ptr);. Estás intentando liberar la memoria apuntada por ptr, pero ptr apunta a la dirección de la variable c, que no fue asignada dinámicamente con malloc. 
+* ¿Qué ocurre con la zona reservada por malloc() tras a asignación ptr = &c;? ¿Cómo se puede acceder a ella? ¿Cómo se puede liberar dicha zona?
+    - Después de la asignación ptr = &c;, la dirección de memoria originalmente asignada por malloc se pierde y no se puede acceder ni liberar correctamente. Además, intentar liberarla con free(ptr); causará un comportamiento indefinido, ya que ptr no apunta a una región de memoria asignada dinámicamente.
+# 6. Funciones
 Compila y ejecuta el código de cada uno de los ejemplos proporcionados y responde a las cuestiones proporcionadas para cada uno de ellos.
 
-arg1.c
-¿Por qué el valor de xc no se modifica tras la llamada a sumC? ¿Dónde se modifca esa información?
-Comenta las dos declaraciones adelantadas de sum() y sumC(). Compila de nuevo, ¿Qué ocurre?
-arg2.c
-¿Por qué cambia el valor de y tras la llamada a sum()?
-¿Por qué en ocasiones se usa el operador ‘.’ y en otras ‘->’ para acceder a los campos de una estructura?
-¿Por qué el valor de zc pasa a ser incorrecto sin volver a usarlo en el código?
-Corrije el código para evitar el error producido en zc
-7. Cadenas de caracteres (strings)
+## arg1.c
+* ¿Por qué el valor de xc no se modifica tras la llamada a sumC? ¿Dónde se modifca esa información?
+* Comenta las dos declaraciones adelantadas de sum() y sumC(). Compila de nuevo, ¿Qué ocurre?
+## arg2.c
+* ¿Por qué cambia el valor de y tras la llamada a sum()?
+* ¿Por qué en ocasiones se usa el operador ‘.’ y en otras ‘->’ para acceder a los campos de una estructura?
+* ¿Por qué el valor de zc pasa a ser incorrecto sin volver a usarlo en el código?
+* Corrije el código para evitar el error producido en zc
+# 7. Cadenas de caracteres (strings)
 Compila y ejecuta el código de cada uno de los ejemplos proporcionados y responde a las cuestiones proporcionadas para cada uno de ellos.
 
-strings1.c
+## strings1.c
 El código contiene un error. ¿Se manifiesta en compilación o en ejecución? ¿Por qué se produce? Soluciona el error comentando la(s) línea(s) afectadas. Vuelve a compilar y ejecutar.
 ¿En qué dirección está la letra 'B' de la cadena "Bonjour"? ¿Y la de la la letra 'j'?
 Tras la asignación p=msg2;, ¿cómo podemos recuperar la dirección de la cadena "Bonjour"?
 ¿Por qué la longitud de las cadenas p y msg2 es 2 tras la línea 30? Se asignan 3 bytes a 'p' que modifican a ambos, pero luego la longitud es sólo 2.
 ¿Por qué strlen() devuelve un valor diferente a sizeof()?
-strings2.c
+## strings2.c
 El código de copy no funciona. ¿Por qué?
 Usa ahora la función copy2() (descomenta la línea correspondiente). ¿Funciona la copia?
 Propón una implementación correcta de la copia.
 ¿Qué hace la función mod()? ¿Por qué funciona?
 Descomenta la última llamada a la función mod(). Compila y ejecuta. ¿Por qué se produce el error?
-Ejercicio 2
+___
+# Ejercicio 2
 El programa primes cuyo código fuente se muestra a continuación, ha sido desarrollado para calcular la suma de los n primeros números primos. Lamentablemente, el programador ha cometido algunos errores. Utilizando el depurador de C gdb el alumno debe encontrar y corregir los errores. Compilar directamente en línea de comandos: gcc -g -w -o primes primes.c
 
 /**
