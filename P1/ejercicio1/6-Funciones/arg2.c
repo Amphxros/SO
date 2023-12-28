@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 /* Structured data type */
 struct _complex_ {
@@ -42,14 +43,12 @@ int sum(int *pa, int *pb)
 	return c;  /* return by value */
 }
 
-struct _complex_ * sumC( struct _complex_* a,  struct _complex_* b)
+struct _complex_ *sumC(struct _complex_ *a, struct _complex_ *b)
 {
-	struct _complex_ r;
-	r.re = a->re + b->re;
-	r.im = a->im + b->im;
+    struct _complex_ *r = (struct _complex_ *)malloc(sizeof(struct _complex_));
+    r->re = a->re + b->re;
+    r->im = a->im + b->im;
 
-	// We modify the first argument
-	a->re = 12.5;
-	a->im = 13.4;
-	return &r;
-}
+    // No se modifica el primer argumento para evitar problemas
+    return r;
+};

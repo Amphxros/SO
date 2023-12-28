@@ -11,7 +11,7 @@ int main()
 	printf("msg: %s, p: %s, msg2: %s\n", msg, p, msg2);
 	printf("dir de msg: %p, dir de p: %p, dir de msg2: %p\n", msg, p, msg2);
 
-	p = msg2;
+	//p = msg2;
 	printf("msg: %s, p: %s, msg2: %s\n", msg, p, msg2);
 	printf("dir de msg: %p, dir de p: %p, dir de msg2: %p\n", msg, p, msg2);
 
