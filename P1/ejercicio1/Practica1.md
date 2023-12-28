@@ -306,11 +306,13 @@ Asimismo, dado que el argumento title no será procesado por getopt() (pues no e
 Completa el código y responde a las siguientes preguntas:
 
 - ¿Qué cadena de caracteres debes utilizar como tercer argumento de getopt()?
-
+    - La cadena de caracteres que debes utilizar como tercer argumento de getopt() es <b>"hel:"</b>.
 - ¿Qué línea de código utilizas para leer el argumento title?
-
+    - <b>"options.title = argv[optind];"</b>
+___
 # Ejercicio 4
-Estudiar el código y el funcionamiento del programa show-passwd.c, que lee el contenido del fichero del sistema /etc/passwd e imprime por pantalla (o en otro fichero dado) las distintas entradas de/etc/passwd –una por línea–, así como los distintos campos de cada entrada. El fichero /etc/passwd almacena en formato de texto plano información esencial de los usuarios del sistema, como su identificador numérico de usuario o grupo así como el programa configurado como intérprete de órdenes (shell) predeterminado para cada usuario. Para obtener más información sobre este fichero se ha de consultar su página de manual: man 5 passwd
+
+Estudiar el código y el funcionamiento del programa show-passwd.C, que lee el contenido del fichero del sistema /etc/passwd e imprime por pantalla (o en otro fichero dado) las distintas entradas de/etc/passwd –una por línea–, así como los distintos campos de cada entrada. El fichero /etc/passwd almacena en formato de texto plano información esencial de los usuarios del sistema, como su identificador numérico de usuario o grupo así como el programa configurado como intérprete de órdenes (shell) predeterminado para cada usuario. Para obtener más información sobre este fichero se ha de consultar su página de manual: man 5 passwd
 
 El modo de uso del programa puede consultarse invocándolo con la opción -h:
 
@@ -320,15 +322,15 @@ Las opciones -v y -p, permiten configurar el formato en el que el programa impri
 
 Uno de los principales objetivos de este ejercicio es que el estudiante se familiarize con tres funciones muy útiles empleadas por el programa show-passwd.c , y cuya página de manual debe consultarse:
 
-  int sscanf(const char *s, const char *format, ...);
-Variante de scanf() que permite leer con formato a partir de un buffer de caracteres pasado como primer parámetro (s) . La función almacena en variables del programa, pasadas como argumento tras la cadena de formato, el resultado de convertir los distintos “tokens” de s de ASCII a binario.
+- <b>int sscanf(const char *s, const char *format, ...);</b> : Variante de scanf() que permite leer con formato a partir de un buffer de caracteres pasado como primer parámetro (s) . La función almacena en variables del programa, pasadas como argumento tras la cadena de formato, el resultado de convertir los distintos “tokens” de s de ASCII a binario.
 
-  char *strsep(char **stringp, const char *delim);
-Permite dividir una cadena de caracteres en tokens, proporcionando como segundo parámetro la cadena delimitadora de esos tokens. Como se puede observar en el programa show-passwd.c, esta función se utiliza para extraer los distintos campos almacenados en cada línea del fichero /etc/passwd, que están separados por ":". La función strsep() se usa típicamente en un bucle, que para tan pronto como el token devuelto es NULL. El primer argumento de la función es un puntero por referencia. Antes de comenzar el bucle, *stringp debe apuntar al comienzo de la cadena que deseamos procesar. Cuando strsep() retorna, *stringp apunta al resto de la cadena que queda por procesar.
+- <b>char *strsep(char **stringp, const char *delim);</b>: Permite dividir una cadena de caracteres en tokens, proporcionando como segundo parámetro la cadena delimitadora de esos tokens. Como se puede observar en el programa show-passwd.c, esta función se utiliza para extraer los distintos campos almacenados en cada línea del fichero /etc/passwd, que están separados por ":". La función strsep() se usa típicamente en un bucle, que para tan pronto como el token devuelto es NULL. El primer argumento de la función es un puntero por referencia. Antes de comenzar el bucle, *stringp debe apuntar al comienzo de la cadena que deseamos procesar. Cuando strsep() retorna, *stringp apunta al resto de la cadena que queda por procesar.
 
 Responda a las siguientes preguntas:
 
-Para representar cada una de las entradas del fichero /etc/passwd se emplea el tipo de datos passwd_entry_t (estructura definida en defs.h). Nótese que muchos de los campos almacenan cadenas de caracteres definidas como arrays de caracteres de longitud máxima prefijada, o mediante el tipo de datos char*. La función parse_passwd(), definida en show-passwd.c es la encargada de inicializar los distintos campos de la estructura. ¿Cuál es el propósito de la función clone_string() que se usa para inicializar algunos de los citados campos tipo cadena? ¿Por qué no es posible en algunos casos simplemente copiar la cadena vía strcpy() o realizando una asignación campo=cadena_existente;? Justifique la respuesta.
+Para representar cada una de las entradas del fichero /etc/passwd se emplea el tipo de datos passwd_entry_t (estructura definida en defs.h). Nótese que muchos de los campos almacenan cadenas de caracteres definidas como arrays de caracteres de longitud máxima prefijada, o mediante el tipo de datos char*. La función parse_passwd(), definida en show-passwd.c es la encargada de inicializar los distintos campos de la estructura.
+- ¿Cuál es el propósito de la función clone_string() que se usa para inicializar algunos de los citados campos tipo cadena? ¿Por qué no es posible en algunos casos simplemente copiar la cadena vía strcpy() o realizando una asignación "campo=cadena_existente;"? Justifique la respuesta.
+    -  Se utiliza para hacer una copia dinámica de una cadena de caracteres. Su propósito es asignar dinámicamente memoria para almacenar una copia de la cadena original y devolver un puntero a esa nueva memoria asignada. La razón principal para no usar strcpy() o una simple asignación (campo = cadena_existente) es que algunas de las cadenas de caracteres almacenadas en la estructura passwd_entry_t son definidas como punteros (char*) y no como arrays de caracteres de longitud máxima prefijada.
 
 La función strsep(), utilizada en parse_passwd(), modifica la cadena que se desea dividir en tokens. ¿Qué tipo de modificaciones sufre la cadena (variable line) tras invocaciones sucesivas de strsep()? Pista: Consúltese el valor y las direcciones de las variables del programa usando el depurador.
 
