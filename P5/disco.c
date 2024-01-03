@@ -8,14 +8,16 @@
 // Definir semáforos y variables globales
 int aforo_actual = 0;
 int numVipsWaiting=0;
-	pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-	pthread_cond_t vip_cond = PTHREAD_COND_INITIALIZER;
-	pthread_cond_t normal_cond = PTHREAD_COND_INITIALIZER;
+	
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //main process
+pthread_cond_t vip_cond = PTHREAD_COND_INITIALIZER; // vip "bool"
+pthread_cond_t normal_cond = PTHREAD_COND_INITIALIZER; // not vip "bool"
+
 void enter_normal_client(int id)
 {
 	 pthread_mutex_lock(&mutex);
 
-    while (aforo_actual >= CAPACITY && numVipsWaiting==0)
+    while (aforo_actual >= CAPACITY && numVipsWaiting==0) //siempre que no hayan vips esperando y haya aforo
     {
         printf("Client %2d waiting to enter (normal)\n", id);
         pthread_cond_wait(&normal_cond, &mutex);
@@ -31,7 +33,7 @@ void enter_vip_client(int id)
 {
 	pthread_mutex_lock(&mutex);
 	
-    while (aforo_actual >= CAPACITY)
+    while (aforo_actual >= CAPACITY) //son vips, solo hace falta que haya aforo
     {
         printf("Client %2d waiting to enter (vip)\n", id);
         pthread_cond_wait(&vip_cond, &mutex);
@@ -46,7 +48,7 @@ void enter_vip_client(int id)
 
 void dance(int id, int isvip)
 {
-	printf("Client %2d (%s) dancing in disco\n", id, VIPSTR(isvip));
+	printf("Client %2d (%s) dancing in disco ~\n", id, VIPSTR(isvip));
 	sleep((rand() % 3) + 1);
 }
 
@@ -80,8 +82,9 @@ void *client(void *arg)
     int isvip = *((int *)(arg + sizeof(int)));
 
 	if(isvip){
-		enter_vip_client(id);
 		numVipsWaiting++;
+		enter_vip_client(id);
+		
 	}
 	else{
 		enter_normal_client(id);
@@ -96,15 +99,15 @@ void *client(void *arg)
 
 int main(int argc, char *argv[])
 {
-	if (argc != 2)
+	if (argc != 2) //tiene que tener un argumento: nº de clientes
     {
         fprintf(stderr, "Usage: %s <number_of_clients>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    int num_clients = atoi(argv[1]);
-    pthread_t clients[num_clients];
-    int client_data[num_clients][2]; // 0 not vip 1 vip, could be 2 arrays but everyone could be vip or not so at least all the clients
+    int num_clients = atoi(argv[1]); 
+    pthread_t clients[num_clients];// all the clients sin importar si son vips o no
+    int client_data[num_clients][2]; // 0 not vip 1 vip, could be 2 arrays but everyone could be vip or not so at least all the clients * 2
 
     srand((int)time(NULL));
 
@@ -138,3 +141,4 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+

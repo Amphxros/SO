@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
             options.action = PRINT_TEXT_ACT;
             break;
         case 'o':
-            options.output_file = argv[1];
-			options.input_file=argv[2];
+            options.output_file = optarg;
+			options.input_file=optarg;
             options.action = WRITE_BINARY_ACT;
             break;
         case 'c':

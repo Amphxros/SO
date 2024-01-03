@@ -4,7 +4,8 @@
 #include <err.h>
 
 void write_strings(FILE* file, int argc, char* argv[]){
-	for(int i=2; i<argc;i++){
+	int i;
+	for(i=2; i<argc;i++){
 		fwrite(argv[i], 1, strlen(argv[i]) + 1, file);
 	}
 }
