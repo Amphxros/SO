@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 /* Forward declaration */
 int get_size_dir(char *fname, size_t *blocks);
 
@@ -9,6 +14,20 @@ int get_size_dir(char *fname, size_t *blocks);
  */
 int get_size(char *fname, size_t *blocks)
 {
+	struct stat stat_buffer;
+
+	if(lstat(fname, &stat_buffer)==-1){
+		perror("Error al obtener información del fichero");
+        return -1;
+	}
+
+	if(S_ISDIR(stat_buffer.st_mode)){
+		return get_size_dir(fname,blocks);
+	}
+	else{
+		*blocks+=stat_buffer.st_blocks;
+		return 0;
+	}
 
 }
 
@@ -19,6 +38,30 @@ int get_size(char *fname, size_t *blocks)
  */
 int get_size_dir(char *dname, size_t *blocks)
 {
+	DIR* dir= opendir(dname);
+	if(dir==NULL){
+		 perror("Error al abrir el directorio");
+        return -1;
+	}
+
+	struct dirent *entry;
+	while((entry= readdir(dir)) !=NULL){
+		// Ignorar las entradas . y ..
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        char entry_path[PATH_MAX];
+        snprintf(entry_path, PATH_MAX, "%s/%s", dname, entry->d_name);
+
+        // Llamar a get_size para obtener el tamaño del fichero o directorio
+        if (get_size(entry_path, blocks) == -1) {
+            closedir(dir);
+            return -1;
+        }
+	}
+	closedir(dir);
+	return 0;
 
 }
 
@@ -28,6 +71,22 @@ int get_size_dir(char *dname, size_t *blocks)
  */
 int main(int argc, char *argv[])
 {
+	if (argc < 2) {
+        fprintf(stderr, "Uso: %s <fichero1> [<fichero2> ...]\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
 
-	return 0;
+    // Procesar cada fichero de la línea de comandos
+    for (int i = 1; i < argc; ++i) {
+        size_t total_blocks = 0;
+        if (get_size(argv[i], &total_blocks) == -1) {
+            fprintf(stderr, "Error al obtener el tamaño del fichero %s\n", argv[i]);
+            exit(EXIT_FAILURE);
+        }
+
+        // Mostrar el tamaño total en kilobytes
+        printf("%ldK %s\n", (long)(total_blocks * 512 / 1024), argv[i]);
+    }
+
+    return 0;
 }

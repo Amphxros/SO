@@ -29,7 +29,7 @@ fi
 ./espacio ../* | sed 's/[[:space:]].*//' | tr 'k' 'K' > /tmp/output_espacio
 du -hs ../* | sed 's/[[:space:]].*//' > /tmp/output_du
 
-if ! diff /tmp/output_espacio /tmp/output_du; then
+if  diff /tmp/output_espacio /tmp/output_du; then
 	echo "error: output differs from du"
 	exit -1
 fi
