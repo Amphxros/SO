@@ -8,6 +8,8 @@
 #include <dirent.h>
 #include <errno.h>
 
+#define PATH_MAX 4096
+
 struct options {
 	char *progname;
 	int recurse;
@@ -56,11 +58,25 @@ int main(int argc, char **argv)
 	opt.recurse = 0;
 
 	/* Apartado a: procesar opciones con getopt */
+	while((o=getopt(argc, argv,"hR"))!=-1){
+		switch (o)
+		{
+		case 'h':
+			/* code */
+			printf("Usage");
+			usage();
+			break;
+		case 'R':
+			opt.recurse=1;
+		break;
+		default:
+			break;
+		}
+	}
 
-
-
-
-
+	if(optind < argc){
+		dirname= argv[optind];
+	}
 	/********************************************/
 
 	if (opt.recurse)
