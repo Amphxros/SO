@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
-#include <err.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <dirent.h>
-#include <errno.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 
 #define PATH_MAX 4096
 
@@ -30,7 +28,20 @@ void usage(void)
 /* apartado b */
 void list_dir(char *name)
 {
+	DIR* dir;
+	struct dirent * dirent;
 
+	dir= opendir(name);
+	if(dir==NULL){
+		perror("opendir");
+		exit(1);
+	}
+
+	while((dirent= readdir(dir))!=NULL){
+		printf("%s \n", dirent->d_name);
+	}
+	closedir(dir);
+	
 }
 
 /* apartado c */
@@ -38,15 +49,44 @@ void process_recurse(char *dirname, char *name)
 {
 	pid_t pid;
 	char path[PATH_MAX];
-
+	
+	pid= fork();
+	if(pid==-1){
+		perror("fork");
+		exit(1);
+	}
+	else if(pid==0){
+		execlp(opt.progname, opt.progname, "-R", name, NULL);
+        perror("execlp");
+		exit(1);
+	}
+	else{
+		waitpid(pid, NULL,0);
+	}
 
 }
 
 /* apartado c */
 void list_dir_recurse(char *name)
 {
-	DIR *d;
-	struct dirent *de;
+	DIR* dir;
+	struct dirent * dirent;
+
+	dir= opendir(name);
+	if(dir==NULL){
+		perror("opendir ");
+	}
+
+	
+    while ((dirent = readdir(dir)) != NULL) {
+        if (dirent->d_type == DT_DIR && 
+		strcmp(dirent->d_name, ".") != 0 && 
+		strcmp(dirent->d_name, "..") != 0) {
+            process_recurse(name, dirent->d_name);
+        }
+    }
+	closedir(dir);
+
 
 }
 
@@ -68,24 +108,25 @@ int main(int argc, char **argv)
 			break;
 		case 'R':
 			opt.recurse=1;
+			if(optind < argc){
+				dirname= argv[optind];
+			}
 		break;
 		default:
 			break;
 		}
 	}
 
-	if(optind < argc){
-		dirname= argv[optind];
-	}
+	
 	/********************************************/
 
 	if (opt.recurse)
-		printf("%s:\n", dirname);
+        printf("%s:\n", dirname);
 
-	list_dir(dirname);
+    list_dir(dirname);
 
-	if (opt.recurse)
-		list_dir_recurse(dirname);
+    if (opt.recurse)
+        list_dir_recurse(dirname);
 
 	return 0;
 }
