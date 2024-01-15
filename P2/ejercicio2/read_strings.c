@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 char* loadstr(FILE* input) {
     // Determine the length of the string
     long pos = ftell(input);
     long length = 0;
-
+	//calculate the length of the file
     while (fgetc(input) != '\0') {
         length++;
     }
@@ -12,7 +13,7 @@ char* loadstr(FILE* input) {
     // Return to the starting position
     fseek(input, pos, SEEK_SET);
 
-    // Allocate memory for the string
+    // Allocate memory for the string 
     char* str = (char*)malloc(length + 1);
     if (!str) {
         perror("Memory allocation error");
@@ -28,13 +29,11 @@ char* loadstr(FILE* input) {
 void read_strings( FILE* file){
 	while(!feof(file)){
 		char * line= loadstr(file);
-		if(feof(file)){
-			free(line);
-			break;
-		}
-
 		printf("%s\n", line);
 		free(line);
+		if(feof(file)){
+			break;
+		}
 	}
 }
 

@@ -20,6 +20,8 @@ int print_text_file(char *path)
     char line[MAXLEN_LINE_FILE];
     while (fgets(line, MAXLEN_LINE_FILE, file) != NULL)
     {
+        //char* token = strsep(&line, ":"); use this to split 
+        
         printf("%s", line);
     }
 
@@ -112,8 +114,8 @@ int main(int argc, char *argv[])
             options.action = WRITE_BINARY_ACT;
             break;
         case 'c':
+            options.input_file=optarg;
             options.action = PRINT_BINARY_ACT;
-			options.input_file=optarg;
             break;
         default:
             exit(EXIT_FAILURE);
