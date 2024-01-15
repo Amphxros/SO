@@ -31,7 +31,6 @@ int get_size(char *fname, size_t *blocks)
 
 }
 
-
 /* Gets the total number of blocks occupied by all the files in a directory. If
  * a contained file is a directory a recursive call to get_size_dir is
  * performed. Entries . and .. are conveniently ignored.
@@ -61,8 +60,8 @@ int get_size_dir(char *dname, size_t *blocks)
         }
 	}
 	closedir(dir);
-	return 0;
 
+	return 0;
 }
 
 /* Processes all the files in the command line calling get_size on them to

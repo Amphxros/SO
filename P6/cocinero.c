@@ -23,6 +23,19 @@ struct sembuf sem_signal = {0, 1, 0}; // Señal
 
 struct SharedMemory *shared_mem;
 
+/*void Producer() {
+...
+element = produce();
+mutex_lock(&mutex)
+while( num_elem == MAX_BUFFER)
+    cond_wait(&event, &mutex);
+insert(element);
+cond_broadcast(&event);
+mutex_unlock(&mutex);
+...
+}
+*/
+
 void putServingsInPot(int servings)
 {
     if (semop(sem_id, &sem_wait, 1) == -1) {

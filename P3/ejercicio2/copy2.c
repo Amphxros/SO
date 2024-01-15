@@ -53,7 +53,7 @@ void copy_link(char *orig, char *dest)
 {
 	struct stat stat_buffer;
 
-	 // Obtener información del enlace simbólico
+	// Obtener información del enlace simbólico
     if (lstat(orig, &stat_buffer) == -1) {
         perror("Error al obtener información del enlace simbólico");
         exit(EXIT_FAILURE);
@@ -64,7 +64,7 @@ void copy_link(char *orig, char *dest)
 		perror("Error al reservar memoria");
         exit(EXIT_FAILURE);
 	}
-	 ssize_t target_size = readlink(orig, target_path, stat_buffer.st_size);
+	ssize_t target_size = readlink(orig, target_path, stat_buffer.st_size);
     if (target_size == -1) {
         perror("Error al leer la ruta apuntada por el enlace simbólico");
         free(target_path);
@@ -84,7 +84,6 @@ void copy_link(char *orig, char *dest)
     free(target_path);
 
     printf("Copia del enlace simbólico %s a %s\n", orig, dest);
-
 }
 
 int main(int argc, char *argv[])
@@ -95,7 +94,7 @@ int main(int argc, char *argv[])
 	}
 
 	struct stat stat_origen;
-	 // Obtener información del fichero origen
+	// Obtener información del fichero origen
     if (lstat(argv[1], &stat_origen) == -1) {
         perror("Error al obtener información del fichero origen");
         exit(EXIT_FAILURE);

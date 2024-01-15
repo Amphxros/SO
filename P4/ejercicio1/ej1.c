@@ -31,12 +31,15 @@ void list_dir(char *name)
 	DIR* dir;
 	struct dirent * dirent;
 
-	dir= opendir(name);
+	dir = opendir(name);
 	if(dir==NULL){
 		perror("opendir");
 		exit(1);
 	}
 
+	// readdir returns the NEXT directory name (in struct form)
+	// dirent->d_name; name in string 
+	// dirent->d_type; type of file (DT_DIR = directory)
 	while((dirent= readdir(dir))!=NULL){
 		printf("%s \n", dirent->d_name);
 	}
@@ -76,7 +79,6 @@ void list_dir_recurse(char *name)
 	if(dir==NULL){
 		perror("opendir ");
 	}
-
 	
     while ((dirent = readdir(dir)) != NULL) {
         if (dirent->d_type == DT_DIR && 
@@ -86,7 +88,6 @@ void list_dir_recurse(char *name)
         }
     }
 	closedir(dir);
-
 
 }
 
@@ -98,6 +99,7 @@ int main(int argc, char **argv)
 	opt.recurse = 0;
 
 	/* Apartado a: procesar opciones con getopt */
+	// add ':' to the options that require an argument
 	while((o=getopt(argc, argv,"hR"))!=-1){
 		switch (o)
 		{
@@ -108,6 +110,7 @@ int main(int argc, char **argv)
 			break;
 		case 'R':
 			opt.recurse=1;
+			// optind: index of the next element to be processed in argv
 			if(optind < argc){
 				dirname= argv[optind];
 			}

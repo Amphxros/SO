@@ -8,10 +8,30 @@
 // Definir semáforos y variables globales
 int aforo_actual = 0;
 int numVipsWaiting=0;
+
+
+
 	
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //main process
 pthread_cond_t vip_cond = PTHREAD_COND_INITIALIZER; // vip "bool"
 pthread_cond_t normal_cond = PTHREAD_COND_INITIALIZER; // not vip "bool"
+
+/*Hilo que espera mientras se cumpla una condici´on:
+
+lock(mutex);
+while (<conditional expresion>)
+    wait(cond_var, mutex);
+
+<acciones restantes en secci´on cr´ıtica>
+unlock(mutex);
+
+<acciones deseadas fuera de secci´on cr´ıtica>
+*/
+
+/*IMPORTANTE
+wait: siempre en un bucle while
+wait: siempre con el mutex cogido
+signal: mejor con el mutex cogido*/
 
 void enter_normal_client(int id)
 {
@@ -52,6 +72,15 @@ void dance(int id, int isvip)
 	sleep((rand() % 3) + 1);
 }
 
+/*Se˜nalizaci´on desde otro hilo:
+lock(mutex);
+
+<operaciones que afectan a la expresi´on condicional>
+signal(cond_var);
+
+<otras operaciones protegidas>
+unlock(mutex);*/
+
 void disco_exit(int id, int isvip)
 {
 	 pthread_mutex_lock(&mutex);
@@ -83,18 +112,15 @@ void *client(void *arg)
 
 	if(isvip){
 		numVipsWaiting++;
-		enter_vip_client(id);
-		
+    	enter_vip_client(id);	
 	}
-	else{
+	else
 		enter_normal_client(id);
-	}
 
 	dance(id,isvip);
 	disco_exit(id,isvip);
 
 	return NULL;
-
 }
 
 int main(int argc, char *argv[])
@@ -125,20 +151,15 @@ int main(int argc, char *argv[])
 		
 	
     }
+
 	printf("\n");
     for (int i = 0; i < num_clients; i++)
-    {
-		// corremos los hilos
         pthread_join(clients[i], NULL);
-    }
 
     // Destruimos el proceso principal 
     pthread_mutex_destroy(&mutex);
     pthread_cond_destroy(&vip_cond);
     pthread_cond_destroy(&normal_cond);
 
-
-
 	return 0;
 }
-

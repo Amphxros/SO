@@ -21,6 +21,19 @@ struct sembuf sem_signal = {0, 1, 0}; // Señal
 
 struct SharedMemory *shared_mem;
 
+/*void Consumer() {
+...
+mutex_lock(&mutex)
+while( !num_elem )
+    cond_wait(&event, &mutex);
+element = extract();
+cond_broadcast(&event);
+mutex_unlock(&mutex);
+consume(element);
+...
+}
+*/
+
 int getServingsFromPot(void)
 {
     if (semop(sem_id, &sem_wait, 1) == -1) {

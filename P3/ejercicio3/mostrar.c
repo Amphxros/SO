@@ -7,7 +7,6 @@
 #include <sys/stat.h>
 #include <getopt.h>
 
-
 void mostrar_contenido(char* fichero, off_t offset){
 	int fd= open(fichero, O_RDONLY);
 	if(fd==-1){
@@ -37,7 +36,6 @@ void mostrar_contenido(char* fichero, off_t offset){
     }
 
     close(fd);
-
 }
 
 int main(int argc, char *argv[])

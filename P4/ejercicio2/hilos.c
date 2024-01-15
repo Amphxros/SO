@@ -20,9 +20,9 @@ int main(int argc, char* argv[])
 {
 	pthread_t id;
 	struct hilosDato hilo;
-	hilo.id=atoi(argv[1]);
-	hilo.priority= atoi(argv[2]);
-	if(pthread_create(&id, NULL, thread_usuario,&hilo)!=0){
+	hilo.id = atoi(argv[1]);
+	hilo.priority = atoi(argv[2]);
+	if(pthread_create(&id, NULL, thread_usuario, &hilo)!=0){
 		perror("thread");
 		exit(1);
 	}

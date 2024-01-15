@@ -6,8 +6,6 @@
 #include <sys/wait.h>
 
 /*programa que temporiza la ejecución de un proceso hijo */
-
-
 int main(int argc, char **argv)
 {
 	if(argc < 2){
@@ -24,7 +22,7 @@ int main(int argc, char **argv)
         }
 	}
 	else{
-		 // Proceso padre
+		// Proceso padre
         // Temporizar la ejecución del proceso hijo (por ejemplo, 5 segundos)
         sleep(5);
 
@@ -41,7 +39,6 @@ int main(int argc, char **argv)
 
         exit(EXIT_SUCCESS);
 	}
-
 
 	return 0;
 }

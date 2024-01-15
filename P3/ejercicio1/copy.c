@@ -12,15 +12,15 @@ void copy(int fdo, int fdd)
 
 	ssize_t read_, wrote_;
 
-	while((read_ = read(fdo,buffer,BUFFER_SIZE)) > 0){
-		wrote_= write(fdd,buffer,read_);
+	while((read_ = read(fdo, buffer, BUFFER_SIZE)) > 0){
+		wrote_ = write(fdd, buffer, read_);
 		if (wrote_ != read_) {
             perror("Error al escribir en el fichero destino");
             exit(EXIT_FAILURE);
         }
 	}
 
-	 if (read_ == -1) {
+	if (read_ == -1) {
         perror("Error al leer el fichero origen");
         exit(EXIT_FAILURE);
     }
